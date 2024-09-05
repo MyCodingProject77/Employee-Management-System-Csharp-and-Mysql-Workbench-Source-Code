@@ -1,0 +1,120 @@
+
+
+
+
+    Database Connection
+
+
+     private MySqlConnection connection;
+
+public DatabaseConnection()
+{
+    string connectionString = "Server=127.0.0.1;Database=EmployeeDB;Uid=root;Pwd=Msixyz7777@;";
+    connection = new MySqlConnection(connectionString);
+}
+
+public MySqlConnection GetConnection()
+{
+    return connection;
+}
+
+
+
+
+
+   Insert Code
+
+   int id = int.Parse(textBox1.Text);
+string name = textBox2.Text;
+string position = textBox3.Text;
+string salary = textBox4.Text;
+
+string query = "INSERT INTO employees (Id, Name, Position, Salary) VALUES (@Id, @Name, @Position, @Salary)";
+using (MySqlConnection conn = new DatabaseConnection().GetConnection())
+{
+    conn.Open();
+    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+    {
+        cmd.Parameters.AddWithValue("@Id", id);
+        cmd.Parameters.AddWithValue("@Name", name);
+        cmd.Parameters.AddWithValue("@Position", position);
+        cmd.Parameters.AddWithValue("@Salary", salary);
+        cmd.ExecuteNonQuery();
+    }
+}
+MessageBox.Show("Record Inserted Successfully");
+LoadData();
+
+
+
+
+
+
+     Update Code
+
+     int id = int.Parse(textBox1.Text);
+string name = textBox2.Text;
+string position = textBox3.Text;
+string salary = textBox4.Text;
+
+string query = "UPDATE employees SET Name=@Name, Position=@Position, Salary=@Salary WHERE Id=@Id";
+using (MySqlConnection conn = new DatabaseConnection().GetConnection())
+{
+    conn.Open();
+    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+    {
+        cmd.Parameters.AddWithValue("@Id", id);
+        cmd.Parameters.AddWithValue("@Name", name);
+        cmd.Parameters.AddWithValue("@Position", position);
+        cmd.Parameters.AddWithValue("@Salary", salary);
+        cmd.ExecuteNonQuery();
+    }
+}
+MessageBox.Show("Record Updated Successfully");
+LoadData();
+
+
+
+
+
+
+
+     Delete Code
+
+     int id = int.Parse(textBox1.Text);
+
+
+string query = "DELETE FROM employees WHERE Id=@Id";
+using (MySqlConnection conn = new DatabaseConnection().GetConnection())
+{
+    conn.Open();
+    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+    {
+        cmd.Parameters.AddWithValue("@Id", id);
+        cmd.ExecuteNonQuery();
+    }
+}
+MessageBox.Show("Record Deleted Successfully");
+LoadData();
+
+
+
+
+     LoadData Code
+
+     string query = "SELECT * FROM employees";
+using (MySqlConnection conn = new DatabaseConnection().GetConnection())
+{
+    conn.Open();
+    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+    {
+        using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+        {
+            DataTable dt = new DataTable();
+            adapter.Fill(dt);
+            dataGridView1.DataSource = dt;
+        }
+    }
+}
+
+     
